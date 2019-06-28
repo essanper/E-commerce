@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class ProductFilter extends Component {
   render() {
-    const { filter, orderBy } = this.props.value;
+    const { filterAndOrderBy } = this.props.value;
 
     return (
       <div className="container section-filter mb-3">
@@ -11,7 +11,7 @@ export default class ProductFilter extends Component {
             <div className="form-group">
               <label>Filter:</label>
               <select className="form-control" id="selectFilter"
-                onChange={() => { return filter(document.getElementById("selectFilter").value)}}>
+                onChange={() => { return filterAndOrderBy(document.getElementById("selectFilter").value, document.getElementById("selectOrderBy").value)}}>
                 <option>all products</option>
                 <option>Tecnology</option>
                 <option>Sport</option>
@@ -23,7 +23,7 @@ export default class ProductFilter extends Component {
             <div className="form-group">
               <label>Order by:</label>
               <select className="form-control" id="selectOrderBy"
-                onChange={() => { return orderBy(document.getElementById("selectOrderBy").value)}}>
+                onChange={() => { return filterAndOrderBy(document.getElementById("selectFilter").value, document.getElementById("selectOrderBy").value)}}>
                 <option>Indiferent</option>
                 <option>Title</option>
                 <option>Price</option>

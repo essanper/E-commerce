@@ -17,40 +17,130 @@ class ProductProvider extends Component {
     cartTotal: 0,
     filterProduct: "all products"
   };
+
   componentDidMount() {
     this.setProducts();
   }
 
-  filter = (filter) => {
-
+  filterAndOrderBy =  (filterByThis, orderByThis) => {
+    let orderByThisOption = "";
     let products = [];
 
-    firebase.database().ref().child('productos').on('child_added', snap => {
+      if(orderByThis !== "Indiferent"){
 
-      if(snap.val().grupo === filter || filter === "all products"){
-        products.push({
-          id:snap.key,
-          titulo: snap.val().titulo,
-          imagen: snap.val().imagen,
-          precio: snap.val().precio,
-          empresa: snap.val().empresa,
-          descripcion: snap.val().descripcion,
-          grupo: snap.val().grupo,
-          comprado: snap.val().comprado,
-          cantidad: snap.val().cantidad,
-          total: snap.val().total
+        if(orderByThis === "Title"){
+          orderByThisOption = "titulo";
+        }else if(orderByThis === "Price"){
+          orderByThisOption = "precio";
+        }
+
+        firebase.database().ref('productos').orderByChild(orderByThisOption).on('child_added', snap => {
+
+
+          if(snap.val().grupo === filterByThis || filterByThis === "all products"){
+
+            products.push({
+              id:snap.key,
+              titulo: snap.val().titulo,
+              imagen: snap.val().imagen,
+              precio: snap.val().precio,
+              empresa: snap.val().empresa,
+              descripcion: snap.val().descripcion,
+              grupo: snap.val().grupo,
+              comprado: snap.val().comprado,
+              cantidad: snap.val().cantidad,
+              total: snap.val().total
+            });
+          }
+
         });
-      }
 
-    });
+    }else {
 
-    this.setState({products});
+      firebase.database().ref('productos').on('child_added', snap => {
+
+        if(snap.val().grupo === filterByThis || filterByThis === "all products"){
+          products.push({
+            id:snap.key,
+            titulo: snap.val().titulo,
+            imagen: snap.val().imagen,
+            precio: snap.val().precio,
+            empresa: snap.val().empresa,
+            descripcion: snap.val().descripcion,
+            grupo: snap.val().grupo,
+            comprado: snap.val().comprado,
+            cantidad: snap.val().cantidad,
+            total: snap.val().total
+          });
+        }
+
+      });
+
+    }
+
+     this.setState({products});
 
   }
 
-  orderBy = (order) => {
-    console.log(order);
-  }
+  // filter = (filter) => {
+  //
+  //   let products = [];
+  //
+  //   firebase.database().ref().child('productos').on('child_added', snap => {
+  //
+  //     if(snap.val().grupo === filter || filter === "all products"){
+  //       products.push({
+  //         id:snap.key,
+  //         titulo: snap.val().titulo,
+  //         imagen: snap.val().imagen,
+  //         precio: snap.val().precio,
+  //         empresa: snap.val().empresa,
+  //         descripcion: snap.val().descripcion,
+  //         grupo: snap.val().grupo,
+  //         comprado: snap.val().comprado,
+  //         cantidad: snap.val().cantidad,
+  //         total: snap.val().total
+  //       });
+  //     }
+  //
+  //   });
+  //
+  //   this.setState({products});
+  //
+  // }
+
+  // orderBy = (order) => {
+  //   let orderByThis = "";
+  //   let products = [];
+  //
+  //   if(order === "Title") {
+  //     orderByThis = "titulo";
+  //
+  //   } else {
+  //     orderByThis = "precio";
+  //
+  //   }
+  //
+  //   firebase.database().ref('productos').orderByChild(orderByThis).on('child_added', snap => {
+  //
+  //       products.push({
+  //         id:snap.key,
+  //         titulo: snap.val().titulo,
+  //         imagen: snap.val().imagen,
+  //         precio: snap.val().precio,
+  //         empresa: snap.val().empresa,
+  //         descripcion: snap.val().descripcion,
+  //         grupo: snap.val().grupo,
+  //         comprado: snap.val().comprado,
+  //         cantidad: snap.val().cantidad,
+  //         total: snap.val().total
+  //       });
+  //
+  //   });
+  //
+  //   this.setState({products});
+  //
+  // }
 
   // addProduct = () => {
   //   // PONER EN componentDidMount CON LOS DATOS RELLENADOS PARA AGREGAR EL PRODUCTO A FIREBASE
@@ -353,8 +443,7 @@ class ProductProvider extends Component {
           decrement: this.decrement,
           removeItem: this.removeItem,
           clearCart: this.clearCart,
-          filter: this.filter,
-          orderBy: this.orderBy
+          filterAndOrderBy: this.filterAndOrderBy
         }}
       >
         {this.props.children}
