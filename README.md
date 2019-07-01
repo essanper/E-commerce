@@ -1,3 +1,6 @@
+
+![](https://cdn-images-1.medium.com/max/800/1*ytMIcp6uu6UIZpApG1LFYg.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
